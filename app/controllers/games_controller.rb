@@ -10,7 +10,11 @@ class GamesController < ApplicationController
     @letters = params[:letters]
     @score = score_and_message[0]
     @message = score_and_message[1]
-    binding.pry
+    if session[:score]
+      session[:score] += @score
+    else
+      session[:score] = @score
+    end
   end
 
   def valid_english_word?(attempt)
