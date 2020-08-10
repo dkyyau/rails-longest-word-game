@@ -8,7 +8,9 @@ class GamesController < ApplicationController
   def score
     @answer = params[:answer].upcase
     @letters = params[:letters]
-    @message = message
+    @score = score_and_message[0]
+    @message = score_and_message[1]
+    binding.pry
   end
 
   def valid_english_word?(attempt)
@@ -21,15 +23,15 @@ class GamesController < ApplicationController
     attempt.chars.all? { |char| attempt.count(char) <= grid.count(char) }
   end
 
-  def message
+  def score_and_message
     if included?(@answer, @letters)
       if valid_english_word?(@answer)
-        "Congratulations! #{@answer} is a valid English word!"
+        [@answer.length, "Congratulations! #{@answer} is a valid English word!"]
       else
-        "Sorry, but #{@answer} doesn't seem to be a valid English word..."
+        [0, "Sorry, but #{@answer} doesn't seem to be a valid English word..."]
       end
     else
-      "Sorry, but #{@answer} can't be built out of #{@letters}"
+      [0, "Sorry, but #{@answer} can't be built out of #{@letters}"]
     end
   end
 end
